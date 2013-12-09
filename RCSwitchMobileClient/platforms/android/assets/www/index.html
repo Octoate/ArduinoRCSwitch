@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+        <!-- to clean local storage type CTRL+SHIFT+K in Firefox and use the following command:
+            while (localStorage.length) localStorage.removeItem(localStorage.key(0)); -->
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>RC Switch Client</title>
+		<meta name="description" content="Client for RC Switch Arduino project">
+		<meta name="author" content="Tim 'Octoate' Riemann">
+
+		<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<!-- link rel="shortcut icon" href="/favicon.ico" -->
+		<!-- link rel="apple-touch-icon" href="/apple-touch-icon.png" -->
+		
+		<!-- JQuery / JQuery Mobile -->
+		<link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css" />
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/defaultTransition.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.3.2.min.js"></script>
+		
+		<!-- JQuery-JSon: http://code.google.com/p/jquery-json/ -->
+        <script type="text/javascript" src="js/jquery.json-2.4.min.js"></script>
+		
+		<!-- JStorage: http://www.jstorage.info -->
+		<script type="text/javascript" src="js/jstorage.js"></script>
+		
+		<!-- RCSwitch Websocket Client -->
+		<script type="text/javascript" src="js/rcswitchclient.js"></script>
+		
+		<!-- custom style sheets -->
+        <link rel="stylesheet" href="css/custom-icons.css"/>
+	</head>
+	<body>
+		<!-- main page -->
+		<div data-role="page" id="home">
+			<div data-role="header" data-position="fixed"><h1>RC Switch Client</h1></div>
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+			        <li><a href="#home" data-icon="remotecontrol">Home</a></li>
+			        <li><a href="#settings" data-icon="grid">Einstellungen</a></li>
+			        <li><a href="#contact" data-icon="info">Über</a></li>
+				</ul>
+			</div>
+			<div data-role="content" id="switchescontent">
+                <div data-role="fieldcontain" id="switches">
+                    <!-- Placeholder: space will be filled via JavaScript -->
+                </div>
+            </div>
+			<div data-role="footer" data-position="fixed"><h3>Footer der Seite</h3></div>
+		</div>
+		
+		<!-- Settings -->
+		<div data-role="page" id="settings">
+		    <div data-role="header" data-position="fixed"><h1>RC Switch Client</h1></div>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="remotecontrol">Home</a></li>
+                    <li><a href="#settings" data-icon="grid">Einstellungen</a></li>
+                    <li><a href="#contact" data-icon="info">Über</a></li>
+                </ul>
+            </div>
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" data-divider-theme="d" data-split-icon="delete" id="settingsListview">
+                    
+                    <!-- server configuration -->
+                    <li data-role="list-divider">Server</li>
+                    <li>
+                        <div data-role="fieldcontain">
+                            <label for="serviceaddress">Serveradresse:</label>
+                            <input type="text" name="server" id="serviceaddress" value=""  />
+                        </div>
+                    </li>
+                    
+                    <!-- switch configuration -->
+                    <li data-role="list-divider" id="switchList">Schalter</li>
+                    
+                    <!-- switches -->
+                    <!-- placeholder -> will be filled by JavaScript method -->
+                    
+                    <!-- add switch button -->
+                    <li data-role="list-divider">Schalter hinzufügen</li>
+                    <li data-icon="plus">
+                        <a href="#addswitch">
+                            Neu
+                        </a>
+                    </li>
+                </ul>
+                
+                <div data-role="popup" id="removeSwitchPopup" data-theme="d" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+                    <h3>Schalter löschen</h3>
+                    <p>Wollen Sie den Schalter wirklich löschen?</p>
+                    <input type="hidden" id="switchIndex" name="switchIndex" value="[placeholder]" />
+                    <a href="#settings" id="deleteSwitchPopup" data-role="button" data-rel="back" data-theme="b" data-icon="check" data-inline="true" data-mini="true">Ja</a>
+                    <a href="#settings" data-role="button" data-rel="back" data-inline="true" data-mini="true">Nein</a>
+                </div>
+                
+            </div>
+            <div data-role="footer" data-position="fixed"><h3>Footer der Seite</h3></div>
+		</div>
+		
+		<!-- contact -->
+		<div data-role="page" id="contact">
+			<div data-role="header" data-position="fixed"><h1>RC Switch Client</h1></div>
+			<div data-role="navbar">
+				<ul>
+                    <li><a href="#home" data-icon="remotecontrol">Home</a></li>
+                    <li><a href="#settings" data-icon="grid">Einstellungen</a></li>
+                    <li><a href="#contact" data-icon="info">Über</a></li>
+                </ul>
+			</div>
+			<div data-role="content">
+				<p>Kontaktinformationen</p>
+				<div data-role="fieldcontain">
+					<form action="form.php" method="post">
+						<label for="name">Namen eingeben:</label>
+						<input type="text" name="name" id="name" value=""  />
+						
+						<label for="email">E-Mail eingeben:</label>
+						<input type="email" name="email" id="email" value=""  />
+		
+						<label for="textarea">Nachricht:</label>
+						<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+					</form>
+				</div>
+			</div>
+	        <div data-role="footer" data-position="fixed"><h3>Footer der Seite</h3></div>
+		</div>
+		
+		<!-- add new switch -->
+		<div data-role="page" id="addswitch">
+            <div data-role="header" data-position="fixed"><h1>RC Switch Client</h1></div>
+            <div data-role="content">
+                <p>Schalter hinzufügen:</p>
+                <div data-role="fieldcontain">
+                    <form>
+                        <label for="switchname">Name:</label>
+                        <input type="text" name="switchname" id="switchname" value=""  />
+                        
+                        <!-- Switch type -->
+                        <div data-role="fieldcontain">
+                            <label for="switchType">
+                                Typ:
+                            </label>
+                            <select id="switchType" name="switchType">
+                                <option value="A">
+                                    Typ A
+                                </option>
+                                <option value="B">
+                                    Typ B
+                                </option>
+                                <option value="C">
+                                    Type C: Intertechno
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <!-- Group -->
+                        <div id="group" data-role="fieldcontain">
+                            <fieldset data-role="controlgroup" data-type="horizontal">
+                                <legend>
+                                    System Code:
+                                </legend>
+                                <input id="syscode0" name="syscode0" type="checkbox">
+                                <label for="syscode0">
+                                    0
+                                </label>
+                                <input id="syscode1" name="syscode1" type="checkbox">
+                                <label for="syscode1">
+                                    0
+                                </label>
+                                <input id="syscode2" name="syscode2" type="checkbox">
+                                <label for="syscode2">
+                                    0
+                                </label>
+                                <input id="syscode3" name="syscode3" type="checkbox">
+                                <label for="syscode3">
+                                    0
+                                </label>
+                                <input id="syscode4" name="syscode4" type="checkbox">
+                                <label for="syscode4">
+                                    0
+                                </label>
+                            </fieldset>
+                        </div>
+                        
+                        <!-- Switch number -->
+                        <div id="switchnumber" data-role="fieldcontain">
+                            <fieldset data-role="controlgroup" data-type="horizontal">
+                                <legend>
+                                    Unit Code:
+                                </legend>
+                                <input id="unitcode0" name="unitcode0" type="checkbox">
+                                <label for="unitcode0">
+                                    0
+                                </label>
+                                <input id="unitcode1" name="unitcode1" type="checkbox">
+                                <label for="unitcode1">
+                                    0
+                                </label>
+                                <input id="unitcode2" name="unitcode2" type="checkbox">
+                                <label for="unitcode2">
+                                    0
+                                </label>
+                                <input id="unitcode3" name="unitcode3" type="checkbox">
+                                <label for="unitcode3">
+                                    0
+                                </label>
+                                <input id="unitcode4" name="unitcode4" type="checkbox">
+                                <label for="unitcode4">
+                                    0
+                                </label>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a"><a href="#settings" data-role="button">Abbrechen</a></div>
+                    <div class="ui-block-b"><a href="#settings" data-role="button" id="addNewSwitch">Hinzufügen</a></div>
+                </fieldset>
+                
+            </div>
+            <div data-role="footer" data-position="fixed"><h3>Footer der Seite</h3></div>
+        </div>
+	</body>
+</html>

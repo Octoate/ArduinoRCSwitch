@@ -1,0 +1,29 @@
+/*!
+* RC Switch Client - custom icons
+*
+* Copyright 2013 Tim "Octoate" Riemann
+* http://www.octoate.de
+*
+*/
+
+/*!
+ * Remote control icon - CC-BY
+ * attribution: <a href="http://thenounproject.com/noun/remote-control/#icon-No5491" target="_blank">Remote Control</a> designed by <a href="http://thenounproject.com/paultynes" target="_blank">Paul Tynes</a> from The Noun Project
+ */
+.ui-icon-remotecontrol {
+	background-image: url(images/icons/remotecontrol.svg);
+	background-size: 18px 18px;
+	background-position:  -0px 0px;
+}
+
+.ui-icon-red {
+	background-image: url(images/icones.png);
+	background-size: 36px 18px;
+	background-position:  -0px 0px;
+}
+
+.ui-icon-gray {
+	background-image: url(images/icones.png);
+	background-size: 36px 18px;
+	background-position:  -18px 0px;
+}
