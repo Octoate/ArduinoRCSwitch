@@ -124,11 +124,28 @@
             <button type="button" id="connectbtn">Connect</button>
         </div>
         
-        <div id="switch1">
+		<!-- Type A: 10 pole DIP switches -->
+        <div id="switchA">
             <input type="text" id="group1" maxlength="5" size="5" value="10010" />
             <input type="text" id="swnumber1" maxlength="5" size="5" value="10000" />
             <button type="button" id="swon1" onclick="switchOn('10010,10000')">On</button>
             <button type="button" id="swoff1" onclick="switchOff('10010,10000')">Off</button>
+        </div>
+		
+		<!-- Type B: Two rotary/sliding switches -->
+		<div id="switchB">
+            <input type="text" id="group1" maxlength="5" size="5" value="2" />
+            <input type="text" id="swnumber1" maxlength="5" size="5" value="4" />
+            <button type="button" id="swon1" onclick="switchOn('2,4')">On</button>
+            <button type="button" id="swoff1" onclick="switchOff('2,4')">Off</button>
+        </div>
+		
+		<!-- Type C: Intertechno -->
+		<div id="switchC">
+            <input type="text" id="group1" maxlength="5" size="5" value="a" />
+            <input type="text" id="swnumber1" maxlength="5" size="5" value="1" />
+            <button type="button" id="swon1" onclick="switchOn('a,1,2')">On</button>
+            <button type="button" id="swoff1" onclick="switchOff('a,1,2')">Off</button>
         </div>
 
         <div id="debug"></div>
