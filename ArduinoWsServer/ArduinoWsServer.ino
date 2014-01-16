@@ -16,8 +16,10 @@
 
 RCSwitch mySwitch = RCSwitch();
 
-byte mac[] = { 0x52, 0x4F, 0x43, 0x4B, 0x45, 0x54 };
-byte ip[] = { 192, 168, 10 , 200 };
+byte mac[] = { 
+  0x52, 0x4F, 0x43, 0x4B, 0x45, 0x54 };
+byte ip[] = { 
+  192, 168, 10 , 200 };
 
 // Create a Websocket server
 WebSocket wsServer;
@@ -26,16 +28,20 @@ void onConnect(WebSocket &socket) {
   Serial.println("onConnect called");
 }
 
+void onDisconnect(WebSocket &socket) {
+  Serial.println("onDisconnect called");
+}
+
 // You must have at least one function with the following signature.
 // It will be called by the server when a data frame is received.
 void onData(WebSocket &socket, char* dataString, byte frameLength) {
-  
+
 #ifdef DEBUG
   Serial.print("Got data: ");
   Serial.write((unsigned char*)dataString, frameLength);
   Serial.println();
 #endif
-  
+
   if (frameLength == 13)
   {
     Serial.println("Type A: 10 pole DIP switches");
@@ -49,18 +55,22 @@ void onData(WebSocket &socket, char* dataString, byte frameLength) {
   else if (frameLength == 7)
   {
     Serial.println("Type C: Intertechno");
+    switchTypeC(dataString);
   }
-  
+
   // Just echo back data for fun.
   socket.send(dataString, frameLength);
 }
 
+/*
+ * Type A: 10 pole DIP switches
+ */
 void switchTypeA(char* dataString)
 {
   char* state = strtok(dataString, ",");
   char* systemcode = strtok(NULL, ",");
   char* unitcode = strtok(NULL, ",");  
-  
+
   if (dataString[0] == '1')
   {
     Serial.print("On: ");
@@ -71,12 +81,15 @@ void switchTypeA(char* dataString)
     Serial.print("Off: ");
     mySwitch.switchOff(systemcode, unitcode);
   }
-  
+
   Serial.print(systemcode);
   Serial.print(",");
   Serial.println(unitcode);
 }
 
+/*
+ * Type B: Two rotary/sliding switches
+ */
 void switchTypeB(char* dataString)
 {
   if (dataString[0] == '1')
@@ -89,14 +102,33 @@ void switchTypeB(char* dataString)
     Serial.print("Off: ");
     mySwitch.switchOff(int(dataString[2]), int(dataString[4]));
   }
-  
+
   Serial.print(dataString[2]);
   Serial.print(",");
   Serial.println(dataString[4]);
 }
 
-void onDisconnect(WebSocket &socket) {
-  Serial.println("onDisconnect called");
+/*
+ * Type C: Intertechno
+ */
+void switchTypeC(char* dataString)
+{
+  if (dataString[0] == '1')
+  {
+    Serial.print("On: ");
+    mySwitch.switchOn(dataString[2], int(dataString[4]), int(dataString[6]));
+  }
+  else
+  {
+    Serial.print("Off: ");
+    mySwitch.switchOn(dataString[2], int(dataString[4]), int(dataString[6]));
+  }
+
+  Serial.print(dataString[2]);
+  Serial.print(",");
+  Serial.println(dataString[4]);
+  Serial.print(",");
+  Serial.println(dataString[6]);
 }
 
 void setup() {
@@ -104,19 +136,19 @@ void setup() {
   Serial.begin(57600);
 #endif
   Ethernet.begin(mac, ip);
-  
+
   wsServer.registerConnectCallback(&onConnect);
   wsServer.registerDataCallback(&onData);
   wsServer.registerDisconnectCallback(&onDisconnect);  
   wsServer.begin();
-  
+
   delay(100); // Give Ethernet time to get ready
-  
+
   //mySwitch.enableReceive(0);  // Receiver on inerrupt 0 => that is pin #2 (pin #3 on Arduino Leonardo)
   mySwitch.enableTransmit(8);  // Using Pin #8
-  
-  Serial.println("Arduino Websocket Server started.");
-  
+
+    Serial.println("Arduino Websocket Server started.");
+
   //enable watchdog timer (2 seconds)
   wdt_enable(WDTO_8S);
 }
@@ -124,13 +156,15 @@ void setup() {
 void loop() {
   // Should be called for each loop.
   wsServer.listen();
-  
+
   // Do other stuff here, but don't hang or cause long delays.
   delay(100);
   //if (wsServer.isConnected()) {
-    //wsServer.send("abc123", 6);
+  //wsServer.send("abc123", 6);
   //}
-  
+
   //reset watchdog timer
   wdt_reset();
 }
+
+
