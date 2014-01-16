@@ -126,7 +126,7 @@ void switchTypeC(char* dataString)
 
   Serial.print(dataString[2]);
   Serial.print(",");
-  Serial.println(dataString[4]);
+  Serial.print(dataString[4]);
   Serial.print(",");
   Serial.println(dataString[6]);
 }
