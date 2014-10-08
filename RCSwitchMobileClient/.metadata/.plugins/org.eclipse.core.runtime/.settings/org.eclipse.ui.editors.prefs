@@ -23,6 +23,7 @@ htmlTagPairOccurrenceIndicationHighlighting=false
 htmlTagPairOccurrenceIndicationTextStyle=BOX
 lineNumberRuler=true
 occurrenceIndicationColor=60,64,67
+overviewRuler_migration=migrated_3.1
 pydevOccurrenceHighlighting=false
 pydevOccurrenceIndication=true
 pydevOccurrenceIndicationColor=94,94,94
